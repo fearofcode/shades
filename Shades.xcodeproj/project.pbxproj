@@ -11,6 +11,8 @@
 		55FCF45C20975B7E000CFFC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55FCF45B20975B7E000CFFC1 /* Assets.xcassets */; };
 		55FCF45F20975B7E000CFFC1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55FCF45D20975B7E000CFFC1 /* MainMenu.xib */; };
 		55FCF46820975DEC000CFFC1 /* ShadeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FCF46720975DEC000CFFC1 /* ShadeWindow.swift */; };
+		8057D9F220A792A10029E8DE /* CloseWindowIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057D9F120A792A10029E8DE /* CloseWindowIconView.swift */; };
+		8057D9F420A799BC0029E8DE /* CloseWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057D9F320A799BC0029E8DE /* CloseWindowDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +23,8 @@
 		55FCF46020975B7E000CFFC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55FCF46120975B7E000CFFC1 /* Shades.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shades.entitlements; sourceTree = "<group>"; };
 		55FCF46720975DEC000CFFC1 /* ShadeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadeWindow.swift; sourceTree = "<group>"; };
+		8057D9F120A792A10029E8DE /* CloseWindowIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseWindowIconView.swift; sourceTree = "<group>"; };
+		8057D9F320A799BC0029E8DE /* CloseWindowDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseWindowDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,8 @@
 				55FCF46020975B7E000CFFC1 /* Info.plist */,
 				55FCF46120975B7E000CFFC1 /* Shades.entitlements */,
 				55FCF46720975DEC000CFFC1 /* ShadeWindow.swift */,
+				8057D9F120A792A10029E8DE /* CloseWindowIconView.swift */,
+				8057D9F320A799BC0029E8DE /* CloseWindowDelegate.swift */,
 			);
 			path = Shades;
 			sourceTree = "<group>";
@@ -133,6 +139,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8057D9F220A792A10029E8DE /* CloseWindowIconView.swift in Sources */,
+				8057D9F420A799BC0029E8DE /* CloseWindowDelegate.swift in Sources */,
 				55FCF45A20975B7E000CFFC1 /* AppDelegate.swift in Sources */,
 				55FCF46820975DEC000CFFC1 /* ShadeWindow.swift in Sources */,
 			);

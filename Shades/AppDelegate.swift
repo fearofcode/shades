@@ -9,7 +9,7 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
     let shadeColorKey = "shadeColor"
     let windowFramesKey = "windowFrames"
 
@@ -42,13 +42,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         // load windows if any previously saved
+        
         if let frameData = defaults.data(forKey: windowFramesKey) {
             let frames = NSKeyedUnarchiver.unarchiveObject(with: frameData) as! [NSRect]
 
             for frame in frames {
-                let newShade = ShadeWindow(withRect: frame, withBackgroundColor: shadeColor)
-                shadeWindows.append(newShade)
-                newShade.makeKeyAndOrderFront(self)
+                let _ = addWindow(withRect: frame)
             }
         }
     }
@@ -61,12 +60,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @IBAction func addShade(_ sender:NSMenuItem) {
-        let newShade = ShadeWindow(withRect: ShadeWindow.defaultContentRect, withBackgroundColor: shadeColor)
-
-        self.configuring = true
+    func addWindow(withRect rect: NSRect) -> ShadeWindow {
+        let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor)
+        newShade.isReleasedWhenClosed = false // WTF?
         shadeWindows.append(newShade)
+        newShade.contentView?.wantsLayer = true
+        
+        CloseWindowIconView.addCloseWindowIconView(inView: newShade.contentView!, forWindow: newShade, delegate: self)
         newShade.makeKeyAndOrderFront(self)
+        
+        return newShade
+    }
+    
+    @IBAction func addDefaultSizedRect(_ sender:NSMenuItem) {
+        let window = addWindow(withRect: ShadeWindow.defaultContentRect)
+
+        window.configuring = true
     }
     
     @IBAction func configureShades(_ sender:NSMenuItem) {
@@ -87,6 +96,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         colorPanel!.makeKeyAndOrderFront(self)
     }
 
+    func closeWindow(_ inView: CloseWindowIconView, windowDidClose window: ShadeWindow) {
+        if let index = shadeWindows.index(of: window) {
+            shadeWindows.remove(at: index)
+        }
+        
+        window.close()
+    }
+    
     func applicationWillTerminate(_ notification: Notification) {
         let defaults = UserDefaults.standard
 

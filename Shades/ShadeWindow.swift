@@ -9,7 +9,7 @@
 import Cocoa
 
 class ShadeWindow: NSWindow {
-    
+    static let defaultContentRect = NSRect(x: 800, y: 800, width: 400, height: 400)
     static let defaultColor = NSColor.blue.withAlphaComponent(0.4)
     private let kConfiguringMask : NSWindow.StyleMask = [.closable, .resizable]
     private let kStandardMask : NSWindow.StyleMask = .borderless
@@ -27,12 +27,12 @@ class ShadeWindow: NSWindow {
         }
     }
     
-    init() {
-        super.init(contentRect: NSRect(x: 800, y: 800, width: 400, height: 400),
+    init(withRect contentRect: NSRect, withBackgroundColor backgroundColor: NSColor) {
+        super.init(contentRect: contentRect,
                    styleMask: kConfiguringMask,
                    backing: NSWindow.BackingStoreType.buffered,
                    defer: false)
-        self.backgroundColor = ShadeWindow.defaultColor
+        self.backgroundColor = backgroundColor
         self.configuring = true
         self.level = NSWindow.Level.floating
         self.isMovableByWindowBackground = true

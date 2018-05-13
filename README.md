@@ -20,5 +20,9 @@ Released under the GPL3. Contact me if for some reason you would like an exempti
 
 ## TODO
 
-* Persist shade windows
-* Add UI for closing them
+* Consider making close view opaque
+
+## Possible further enhancements
+
+* Little quality of life enhancements: fill in the AppIcon, add option to start on startup, etc
+* Per-window configuration

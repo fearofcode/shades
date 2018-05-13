@@ -54,9 +54,6 @@ class CloseWindowIconView: NSView {
         line2.stroke()
     }
     
-    // TODO add layout constraints to move this thing to the top
-    // TODO should not draw when not in configuration mode
-    
     override func mouseDown(with event: NSEvent) {
         toolTip = nil
         previousCursor?.set()
@@ -93,10 +90,10 @@ class CloseWindowIconView: NSView {
     
     class func addCloseWindowIconView(inView view: NSView, forWindow window: ShadeWindow, delegate: CloseWindowDelegate) {
         let frame = NSRect(
-            x: CloseWindowIconView.x,
-            y: view.bounds.height - (CloseWindowIconView.y + CloseWindowIconView.height),
-            width: CloseWindowIconView.width,
-            height: CloseWindowIconView.height
+            x: x,
+            y: view.bounds.height - (y + height),
+            width: width,
+            height: height
         )
         
         let closeWindowView = CloseWindowIconView(frame: frame)
@@ -109,9 +106,9 @@ class CloseWindowIconView: NSView {
         closeWindowView.layer?.shadowOffset = NSMakeSize(2, -2)
         closeWindowView.layer?.shadowRadius = 2
         
-        // TODO consider making a separate rect view and have window itself not be transparent to allow view
-        // to not share opacity of window
-        
         view.addSubview(closeWindowView)
+        
+        // pin to top left. setting topAnchor and leadingAnchor caused the view to not be vertically resizable
+        closeWindowView.autoresizingMask = [.maxXMargin, .minYMargin]
     }
 }

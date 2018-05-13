@@ -10,6 +10,10 @@ To add a new shade window, go to the sunglasses icon in your menu bar, click to 
 
 You can change the color and opacity of the shade windows by selecting the 'Change shade color' item in the menu.
 
+While configuring shade windows, click the Close icon in the upper left corner of the window to close a window.
+
+Your current window color and configuration will be saved when you quit the app and reloaded when you start it again.
+
 The toolbar icon is gratefully taken from the [twemoji](https://github.com/twitter/twemoji) project. 
 
 Released under the GPL3. Contact me if for some reason you would like an exemption.

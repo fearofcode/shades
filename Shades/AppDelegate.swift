@@ -60,19 +60,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
     }
 
     func addWindow(withRect rect: NSRect) -> ShadeWindow {
-        let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor)
+        let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor, withDelegate: self)
         newShade.isReleasedWhenClosed = false // WTF?
         newShade.animationBehavior = .alertPanel
+        newShade.configuring = true
         shadeWindows.append(newShade)
         newShade.contentView?.wantsLayer = true
         
-        CloseWindowIconView.addCloseWindowIconView(inView: newShade.contentView!, forWindow: newShade, delegate: self)
         newShade.makeKeyAndOrderFront(self)
         
         return newShade
     }
     
+    func configureAllWindows() {
+        self.configuring = true
+        
+        for shade in shadeWindows {
+            shade.configuring = true
+        }
+    }
+    
     @IBAction func addDefaultSizedRect(_ sender:NSMenuItem) {
+        configureAllWindows()
+        
         let window = addWindow(withRect: ShadeWindow.defaultContentRect)
 
         window.configuring = true
@@ -86,6 +96,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
     }
 
     @IBAction func showColorPicker(_ sender:NSMenuItem) {
+        configureAllWindows()
+        
         if colorPanel == nil {
             colorPanel = NSColorPanel.shared
             colorPanel!.setTarget(self)

@@ -88,7 +88,7 @@ class CloseWindowIconView: NSView {
         }
     }
     
-    class func addCloseWindowIconView(inView view: NSView, forWindow window: ShadeWindow, delegate: CloseWindowDelegate) {
+    class func addCloseWindowIconView(inView view: NSView, forWindow window: ShadeWindow, delegate: CloseWindowDelegate) -> CloseWindowIconView {
         let frame = NSRect(
             x: x,
             y: view.bounds.height - (y + height),
@@ -110,5 +110,7 @@ class CloseWindowIconView: NSView {
         
         // pin to top left. setting topAnchor and leadingAnchor caused the view to not be vertically resizable
         closeWindowView.autoresizingMask = [.maxXMargin, .minYMargin]
+        
+        return closeWindowView
     }
 }

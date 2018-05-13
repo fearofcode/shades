@@ -13,6 +13,8 @@ class ShadeWindow: NSWindow {
     static let defaultColor = NSColor.blue.withAlphaComponent(0.4)
     private let kConfiguringMask : NSWindow.StyleMask = [.closable, .resizable]
     private let kStandardMask : NSWindow.StyleMask = .borderless
+    private var closeWindowIconView: CloseWindowIconView?
+    var closeWindowDelegate: CloseWindowDelegate!
     
     override var backgroundColor: NSColor! {
         didSet {
@@ -24,15 +26,30 @@ class ShadeWindow: NSWindow {
         didSet {
             self.ignoresMouseEvents = !configuring
             self.styleMask = configuring ? kConfiguringMask : kStandardMask
+            
+            if self.closeWindowIconView != nil && !configuring {
+                self.closeWindowIconView!.removeFromSuperview()
+                self.closeWindowIconView = nil
+            }
+            
+            initializeCloseWindowView()
         }
     }
     
-    init(withRect contentRect: NSRect, withBackgroundColor backgroundColor: NSColor) {
+    func initializeCloseWindowView() {
+        if configuring && closeWindowIconView == nil {
+            closeWindowIconView = CloseWindowIconView.addCloseWindowIconView(inView: self.contentView!, forWindow: self, delegate: closeWindowDelegate)
+        }
+    }
+    
+    init(withRect contentRect: NSRect, withBackgroundColor backgroundColor: NSColor, withDelegate closeWindowDelegate: CloseWindowDelegate) {
         super.init(contentRect: contentRect,
                    styleMask: kConfiguringMask,
                    backing: NSWindow.BackingStoreType.buffered,
                    defer: false)
         self.backgroundColor = backgroundColor
+        
+        self.closeWindowDelegate = closeWindowDelegate
         self.configuring = true
         self.level = NSWindow.Level.floating
         self.isMovableByWindowBackground = true

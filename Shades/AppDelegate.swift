@@ -42,7 +42,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
         }
 
         // load windows if any previously saved
-        
         if let frameData = defaults.data(forKey: windowFramesKey) {
             let frames = NSKeyedUnarchiver.unarchiveObject(with: frameData) as! [NSRect]
 

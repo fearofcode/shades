@@ -62,6 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
     func addWindow(withRect rect: NSRect) -> ShadeWindow {
         let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor)
         newShade.isReleasedWhenClosed = false // WTF?
+        newShade.animationBehavior = .alertPanel
         shadeWindows.append(newShade)
         newShade.contentView?.wantsLayer = true
         

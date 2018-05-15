@@ -61,7 +61,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
 
     func addWindow(withRect rect: NSRect) -> ShadeWindow {
         let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor, withDelegate: self)
-        newShade.isReleasedWhenClosed = false // WTF?
+        // necessary to avoid crashes due to excessive releases https://stackoverflow.com/a/33229137
+        newShade.isReleasedWhenClosed = false
         newShade.animationBehavior = .alertPanel
         newShade.configuring = true
         shadeWindows.append(newShade)

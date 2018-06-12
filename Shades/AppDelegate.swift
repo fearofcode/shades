@@ -10,8 +10,8 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
-    let kShadeColorKey = "shadeColor"
-    let kWindowFramesKey = "windowFrames"
+    private let kShadeColorKey = "shadeColor"
+    private let kWindowFramesKey = "windowFrames"
 
     @IBOutlet weak var statusMenu: NSMenu!
 
@@ -62,12 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func addWindow(withRect rect: NSRect) -> ShadeWindow {
         let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor)
         newShade.delegate = self
-        // necessary to avoid crashes due to excessive releases https://stackoverflow.com/a/33229137
-        newShade.isReleasedWhenClosed = false
-        newShade.animationBehavior = .alertPanel
-        newShade.configuring = true
         shadeWindows.append(newShade)
-        newShade.contentView?.wantsLayer = true
         
         newShade.makeKeyAndOrderFront(self)
         

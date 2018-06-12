@@ -25,9 +25,13 @@ class ShadeWindow: NSWindow {
         didSet {
             self.ignoresMouseEvents = !configuring
             self.styleMask = configuring ? kConfiguringMask : kStandardMask
-            self.standardWindowButton(.zoomButton)?.isHidden = true
-            self.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            self.hideButtons()
         }
+    }
+    
+    func hideButtons() {
+        standardWindowButton(.zoomButton)?.isHidden = true
+        standardWindowButton(.miniaturizeButton)?.isHidden = true
     }
     
     init(withRect contentRect: NSRect, withBackgroundColor backgroundColor: NSColor) {
@@ -40,6 +44,11 @@ class ShadeWindow: NSWindow {
         self.configuring = true
         self.level = NSWindow.Level.floating
         self.isMovableByWindowBackground = true
+        
+        self.isReleasedWhenClosed = false
+        self.animationBehavior = .alertPanel
+        
+        hideButtons()
     }
     
     

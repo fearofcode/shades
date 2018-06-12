@@ -11,10 +11,9 @@ import Cocoa
 class ShadeWindow: NSWindow {
     static let defaultContentRect = NSRect(x: 800, y: 800, width: 400, height: 400)
     static let defaultColor = NSColor.blue.withAlphaComponent(0.4)
-    private let kConfiguringMask : NSWindow.StyleMask = [.closable, .resizable]
+    private let kConfiguringMask : NSWindow.StyleMask = [.closable, .resizable, .titled, .fullSizeContentView]
     private let kStandardMask : NSWindow.StyleMask = .borderless
-    private var closeWindowIconView: CloseWindowIconView?
-    var closeWindowDelegate: CloseWindowDelegate!
+    private var closeButton: NSButton?
     
     override var backgroundColor: NSColor! {
         didSet {
@@ -26,34 +25,23 @@ class ShadeWindow: NSWindow {
         didSet {
             self.ignoresMouseEvents = !configuring
             self.styleMask = configuring ? kConfiguringMask : kStandardMask
-            
-            if self.closeWindowIconView != nil && !configuring {
-                self.closeWindowIconView!.removeFromSuperview()
-                self.closeWindowIconView = nil
-            }
-            
-            initializeCloseWindowView()
+            self.standardWindowButton(.zoomButton)?.isHidden = true
+            self.standardWindowButton(.miniaturizeButton)?.isHidden = true
         }
     }
     
-    func initializeCloseWindowView() {
-        if configuring && closeWindowIconView == nil {
-            closeWindowIconView = CloseWindowIconView.addCloseWindowIconView(inView: self.contentView!, forWindow: self, delegate: closeWindowDelegate)
-        }
-    }
-    
-    init(withRect contentRect: NSRect, withBackgroundColor backgroundColor: NSColor, withDelegate closeWindowDelegate: CloseWindowDelegate) {
+    init(withRect contentRect: NSRect, withBackgroundColor backgroundColor: NSColor) {
         super.init(contentRect: contentRect,
                    styleMask: kConfiguringMask,
                    backing: NSWindow.BackingStoreType.buffered,
                    defer: false)
         self.backgroundColor = backgroundColor
         
-        self.closeWindowDelegate = closeWindowDelegate
         self.configuring = true
         self.level = NSWindow.Level.floating
         self.isMovableByWindowBackground = true
     }
+    
     
     func toggleConfiguring() {
         self.configuring = !self.configuring

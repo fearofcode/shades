@@ -9,9 +9,9 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
-    let shadeColorKey = "shadeColor"
-    let windowFramesKey = "windowFrames"
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+    let kShadeColorKey = "shadeColor"
+    let kWindowFramesKey = "windowFrames"
 
     @IBOutlet weak var statusMenu: NSMenu!
 
@@ -37,12 +37,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
 
         // load shade color if one was previously set
         let defaults = UserDefaults.standard
-        if let colorData = defaults.data(forKey: shadeColorKey) {
+        if let colorData = defaults.data(forKey: kShadeColorKey) {
             shadeColor = NSKeyedUnarchiver.unarchiveObject(with: colorData) as! NSColor
         }
 
         // load windows if any previously saved
-        if let frameData = defaults.data(forKey: windowFramesKey) {
+        if let frameData = defaults.data(forKey: kWindowFramesKey) {
             let frames = NSKeyedUnarchiver.unarchiveObject(with: frameData) as! [NSRect]
 
             for frame in frames {
@@ -60,7 +60,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
     }
 
     func addWindow(withRect rect: NSRect) -> ShadeWindow {
-        let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor, withDelegate: self)
+        let newShade = ShadeWindow(withRect: rect, withBackgroundColor: shadeColor)
+        newShade.delegate = self
         // necessary to avoid crashes due to excessive releases https://stackoverflow.com/a/33229137
         newShade.isReleasedWhenClosed = false
         newShade.animationBehavior = .alertPanel
@@ -109,12 +110,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
         colorPanel!.makeKeyAndOrderFront(self)
     }
 
-    func closeWindow(_ inView: CloseWindowIconView, windowDidClose window: ShadeWindow) {
-        if let index = shadeWindows.index(of: window) {
-            shadeWindows.remove(at: index)
+    func windowWillClose(_ notification: Notification) {
+        if let window = notification.object as? ShadeWindow {
+            if let index = shadeWindows.index(of: window) {
+                shadeWindows.remove(at: index)
+            }
         }
-        
-        window.close()
     }
     
     func applicationWillTerminate(_ notification: Notification) {
@@ -122,12 +123,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, CloseWindowDelegate {
 
         // save the shade color
         let colorData = NSKeyedArchiver.archivedData(withRootObject: shadeColor)
-        defaults.set(colorData, forKey: shadeColorKey)
+        defaults.set(colorData, forKey: kShadeColorKey)
 
         // save window frames
         let frames = shadeWindows.map { $0.frame }
         let frameData = NSKeyedArchiver.archivedData(withRootObject: frames)
-        defaults.set(frameData, forKey: windowFramesKey)
+        defaults.set(frameData, forKey: kWindowFramesKey)
     }
 }
 
